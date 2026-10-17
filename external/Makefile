@@ -12,6 +12,10 @@ ARCH_LIST := arm arm64 x86 x86_64
 API_LEVEL := 23
 EXTRA_CFLAGS := -Oz -D__ANDROID_API__=$(API_LEVEL) -Wno-macro-redefined
 
+# Align ELF segments to 16 KB so the libraries load on devices with 16 KB pages
+# (required by Google Play for 64-bit apps; NDK r27 still defaults to 4 KB)
+PAGE_LDFLAGS := -Wl,-z,max-page-size=16384
+
 NDK_ARCH_arm := armeabi
 TRIPLET_arm := armv7a-linux-androideabi
 CFLAGS_arm := -march=armv7-a -mthumb $(EXTRA_CFLAGS)
@@ -114,7 +118,7 @@ $(ARCH_STOKEN_TARGETS) : %/libstoken.so : %/sysroot stoken/configure
 			--enable-shared --without-gtk \
 			--with-java=$(call get_sysroot,$*)/include \
 			--enable-jni-standalone --disable-symvers \
-                        CFLAGS="$(CFLAGS_$*)" LDFLAGS="-Wl,--strip-debug"
+                        CFLAGS="$(CFLAGS_$*)" LDFLAGS="-Wl,--strip-debug $(PAGE_LDFLAGS)"
 	$(call set_build_env,$*) $(MAKE) -C $*/build-stoken
 	$(call set_build_env,$*) $(MAKE) -C $*/build-stoken install-strip \
 		DESTDIR=$(TOPDIR)/$*/out
@@ -126,7 +130,7 @@ $(ARCH_OC_TARGETS) : %/libopenconnect.so :
 	cp -a openconnect $*/
 	ls -la $*/openconnect
 	$(MAKE) -C $*/openconnect/android sources
-	$(MAKE) -C $*/openconnect/android ARCH=$* NDK=$(NDK)
+	$(MAKE) -C $*/openconnect/android ARCH=$* NDK=$(NDK) EXTRA_LDFLAGS="$(PAGE_LDFLAGS)"
 	cp -Lf $*/openconnect/android/$(TRIPLET_$*)/out/lib/libopenconnect.so $@
 
 # use openconnect to run make-standalone-toolchain.sh and install
