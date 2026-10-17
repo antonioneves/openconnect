@@ -38,6 +38,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.core.AssetExtractor;
+import net.openconnect_vpn.android.core.FaqHtml;
 import net.openconnect_vpn.android.core.WebColors;
 
 public class AboutFragment extends Fragment  {
@@ -60,9 +61,21 @@ public class AboutFragment extends Fragment  {
 		}
 
     	WebView contents = (WebView)v.findViewById(R.id.about_contents);
-    	contents.loadDataWithBaseURL("file:///android_asset/",
-    			WebColors.style(activity) + AssetExtractor.readString(activity, "about.html"),
-    			null, null, null);
+    	// the FAQ comes first, followed by the credits from about.html
+    	String about = AssetExtractor.readString(activity, "about.html");
+    	int start = about.indexOf("<body>") + "<body>".length();
+    	int end = about.lastIndexOf("</body>");
+
+    	StringBuilder html = new StringBuilder();
+    	html.append("<html><head><meta charset=\"UTF-8\">");
+    	html.append(WebColors.style(activity));
+    	html.append("</head><body>");
+    	html.append("<h2>" + activity.getString(R.string.faq) + "</h2>");
+    	html.append(FaqHtml.build(activity));
+    	html.append("<h2>" + activity.getString(R.string.about_openconnect) + "</h2>");
+    	html.append(about.substring(start, end));
+    	html.append("</body></html>");
+    	contents.loadDataWithBaseURL("file:///android_asset/", html.toString(), null, null, null);
     	contents.setBackgroundColor(0);
 
     	return v;
