@@ -22,6 +22,8 @@
 
     <!-- Material 3 Expressive, light/dark following the system, with dynamic color applied at runtime -->
     <style name="Theme.OpenConnect" parent="Theme.Material3Expressive.DayNight">
+        <item name="alertDialogTheme">@style/ThemeOverlay.Material3.MaterialAlertDialog</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
     </style>

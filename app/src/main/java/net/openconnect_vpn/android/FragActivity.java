@@ -25,7 +25,6 @@
 package net.openconnect_vpn.android;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -45,8 +44,14 @@ public class FragActivity extends AppCompatActivity {
 		if(savedInstanceState == null) {
 			try {
 				String fragName = getIntent().getStringExtra(EXTRA_FRAGMENT_NAME);
-				Fragment frag = (Fragment)Class.forName(FRAGMENT_PREFIX + fragName).newInstance();
-				getFragmentManager().beginTransaction().add(R.id.fragment_container, frag).commit();
+				Object frag = Class.forName(FRAGMENT_PREFIX + fragName).newInstance();
+				if (frag instanceof androidx.fragment.app.Fragment) {
+					getSupportFragmentManager().beginTransaction()
+						.add(R.id.fragment_container, (androidx.fragment.app.Fragment)frag).commit();
+				} else {
+					getFragmentManager().beginTransaction()
+						.add(R.id.fragment_container, (android.app.Fragment)frag).commit();
+				}
 			} catch (Exception e) {
 				Log.e(TAG, "unable to create fragment", e);
 				finish();

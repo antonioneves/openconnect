@@ -27,6 +27,7 @@ package net.openconnect_vpn.android.fragments;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.openconnect_vpn.android.MaterialPreferenceDialogs;
 import net.openconnect_vpn.android.ConnectionEditorActivity;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.ShowTextPreference;
@@ -34,16 +35,15 @@ import net.openconnect_vpn.android.TokenImportActivity;
 import net.openconnect_vpn.android.VpnProfile;
 import net.openconnect_vpn.android.core.ProfileManager;
 
-import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.Preference.OnPreferenceClickListener;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -51,10 +51,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
+import android.text.InputType;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.net.Uri;
 
-public class ConnectionEditorFragment extends PreferenceFragment
+public class ConnectionEditorFragment extends PreferenceFragmentCompat
 		implements OnSharedPreferenceChangeListener {
 
 	PreferenceManager mPrefs;
@@ -63,12 +66,10 @@ public class ConnectionEditorFragment extends PreferenceFragment
 
     HashMap<String,Integer> fileSelectMap = new HashMap<String,Integer>();
 
-    private final int IDX_TOKEN_STRING = 65536;
+    private final int IDX_TOKEN_STRING = 1000; // fragment request codes must fit in 16 bits
 
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         mProfile = ProfileManager.get(getArguments().getString("profileUUID"));
         mUUID = mProfile.getUUIDString();
 
@@ -77,7 +78,9 @@ public class ConnectionEditorFragment extends PreferenceFragment
         mPrefs.setSharedPreferencesMode(Context.MODE_PRIVATE);
 
         // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.pref_openconnect);
+        setPreferencesFromResource(R.xml.pref_openconnect, rootKey);
+        MaterialPreferenceDialogs.removeIconSpace(getPreferenceScreen());
+        setInputTypes();
         setClickListeners();
 
         // FIXME: populate the vpn_protocol list dynamically using mOC.getSupportedProtocols()
@@ -127,24 +130,6 @@ public class ConnectionEditorFragment extends PreferenceFragment
 					pref.setSummary(value);
 				}
 			}
-			if (pref instanceof EditTextPreference) {
-				final EditTextPreference etpref = (EditTextPreference)pref;
-				etpref.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-						if (actionId == EditorInfo.IME_ACTION_DONE ||
-								(keyEvent != null &&
-										keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
-										keyEvent.getAction() == KeyEvent.ACTION_DOWN)) {
-							etpref.onClick(etpref.getDialog(), Dialog.BUTTON_POSITIVE);
-							etpref.getDialog().dismiss();
-							return true;
-						} else {
-							return false;
-						}
-					}
-				});
-			}
         }
 
         /* disable_xml_post is only applicable to anyconnect */
@@ -172,9 +157,60 @@ public class ConnectionEditorFragment extends PreferenceFragment
         }
 
         if (key.equals("profile_name")) {
-        	((ConnectionEditorActivity)getActivity()).setProfileName(value);
+        	((ConnectionEditorActivity)requireActivity()).setProfileName(value);
         }
     }
+
+	private void setInputTypes() {
+		HashMap<String,Integer> types = new HashMap<String,Integer>();
+		types.put("profile_name", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS |
+				InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		types.put("server_address", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
+		types.put("split_tunnel_networks", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI |
+				InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+		types.put("dpd_value", InputType.TYPE_CLASS_NUMBER);
+
+		for (String key : new String[] { "profile_name", "server_address", "split_tunnel_networks",
+				"dpd_value", "reported_user_agent", "sni" }) {
+			EditTextPreference pref = findPreference(key);
+			if (pref == null) {
+				continue;
+			}
+			final Integer type = types.get(key);
+			pref.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+				@Override
+				public void onBindEditText(final EditText editText) {
+					if (type != null) {
+						editText.setInputType(type);
+					}
+					/* the Done key confirms the dialog, as it did with the platform preferences */
+					editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+						@Override
+						public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+							if (actionId == EditorInfo.IME_ACTION_DONE ||
+									(keyEvent != null &&
+											keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+											keyEvent.getAction() == KeyEvent.ACTION_DOWN)) {
+								View ok = editText.getRootView().findViewById(android.R.id.button1);
+								if (ok != null) {
+									ok.performClick();
+								}
+								return true;
+							}
+							return false;
+						}
+					});
+				}
+			});
+		}
+	}
+
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference) {
+		if (!MaterialPreferenceDialogs.show(this, preference)) {
+			super.onDisplayPreferenceDialog(preference);
+		}
+	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
 		updatePref(sp, key);
@@ -232,7 +268,7 @@ public class ConnectionEditorFragment extends PreferenceFragment
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					((ConnectionEditorActivity)getActivity()).askProfileRemoval();
+					((ConnectionEditorActivity)requireActivity()).askProfileRemoval();
 					return false;
 				}
 			});
@@ -256,7 +292,7 @@ public class ConnectionEditorFragment extends PreferenceFragment
 		} else {
 			Uri path = data.getData();
 			String key = ProfileManager.fileSelectKeys[idx];
-			ShowTextPreference p = (ShowTextPreference)findPreference(key);
+			ShowTextPreference p = findPreference(key);
 			String new_path = ProfileManager.storeFilePref(mProfile, key, path);
 			p.setText(new_path);
 			updatePref(prefs, key);

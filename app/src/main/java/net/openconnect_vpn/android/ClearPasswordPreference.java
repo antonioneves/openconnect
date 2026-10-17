@@ -28,8 +28,9 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.DialogPreference;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
+import androidx.preference.DialogPreference;
+import androidx.preference.PreferenceDialogFragmentCompat;
 import android.util.AttributeSet;
 
 public class ClearPasswordPreference extends DialogPreference {
@@ -37,16 +38,24 @@ public class ClearPasswordPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        if (positiveResult) {
-            PreferenceManager mPrefs = getPreferenceManager();
-            SharedPreferences sp = mPrefs.getSharedPreferences();
-            for (Map.Entry<String,?> entry : sp.getAll().entrySet()) {
-            	String key = entry.getKey();
-            	if (key.startsWith("FORMDATA-") || key.startsWith("ACCEPTED-CERT-")) {
-            		sp.edit().putString(key, "").apply();
-            	}
+    public static class Dialog extends PreferenceDialogFragmentCompat {
+        @Override
+        public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
+            android.app.Dialog dialog = super.onCreateDialog(savedInstanceState);
+            MaterialPreferenceDialogs.style(dialog);
+            return dialog;
+        }
+
+        @Override
+        public void onDialogClosed(boolean positiveResult) {
+            if (positiveResult) {
+                SharedPreferences sp = getPreference().getSharedPreferences();
+                for (Map.Entry<String,?> entry : sp.getAll().entrySet()) {
+                    String key = entry.getKey();
+                    if (key.startsWith("FORMDATA-") || key.startsWith("ACCEPTED-CERT-")) {
+                        sp.edit().putString(key, "").apply();
+                    }
+                }
             }
         }
     }

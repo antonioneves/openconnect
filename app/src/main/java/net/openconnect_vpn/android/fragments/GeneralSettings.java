@@ -41,34 +41,34 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
+import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.Preference.OnPreferenceClickListener;
+import androidx.preference.PreferenceFragmentCompat;
+import net.openconnect_vpn.android.MaterialPreferenceDialogs;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.api.ExternalAppDatabase;
 import net.openconnect_vpn.android.core.DeviceStateReceiver;
 
-public class GeneralSettings extends PreferenceFragment
+public class GeneralSettings extends PreferenceFragmentCompat
 		implements OnPreferenceClickListener, OnClickListener, OnSharedPreferenceChangeListener {
 
 	private ExternalAppDatabase mExtapp;
 	private PreferenceManager mPrefs;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.general_settings);
+		setPreferencesFromResource(R.xml.general_settings, rootKey);
 
-		mExtapp = new ExternalAppDatabase(getActivity());
+		MaterialPreferenceDialogs.removeIconSpace(getPreferenceScreen());
+
+		mExtapp = new ExternalAppDatabase(requireActivity());
 
 		for (String s : new String[] { "netchangereconnect", "screenoff", "trace_log" }) {
-			findPreference(s).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			this.<Preference>findPreference(s).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 				@Override
 				public boolean onPreferenceChange(Preference arg0, Object arg1) {
 					Intent intent = new Intent(DeviceStateReceiver.PREF_CHANGED);
@@ -114,6 +114,13 @@ public class GeneralSettings extends PreferenceFragment
 			pref.setSummary(lpref.getEntry());
 		}
     }
+
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference) {
+		if (!MaterialPreferenceDialogs.show(this, preference)) {
+			super.onDisplayPreferenceDialog(preference);
+		}
+	}
 
 	private void setClearApiSummary() {
 		Preference clearapi = findPreference("clearapi");

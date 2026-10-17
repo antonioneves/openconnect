@@ -25,10 +25,10 @@
 package net.openconnect_vpn.android;
 
 import android.content.Context;
-import android.preference.DialogPreference;
+import androidx.preference.Preference;
 import android.util.AttributeSet;
 
-public class ShowTextPreference extends DialogPreference {
+public class ShowTextPreference extends Preference {
 
     public ShowTextPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -40,11 +40,6 @@ public class ShowTextPreference extends DialogPreference {
 
     public ShowTextPreference(Context context) {
         this(context, null);
-    }
-
-    @Override
-    protected void onClick() {
-        /* don't invoke the superclass; we do not want a dialog to pop up */
     }
 
     public void setText(String text) {

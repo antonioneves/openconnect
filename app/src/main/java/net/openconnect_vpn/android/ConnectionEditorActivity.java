@@ -51,7 +51,7 @@ public class ConnectionEditorActivity extends AppCompatActivity {
         frag.setArguments(args);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag)
                 .commit();
     }

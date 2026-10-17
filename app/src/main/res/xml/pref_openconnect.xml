@@ -6,7 +6,6 @@
         <EditTextPreference
             android:key="profile_name"
             android:title="@string/profile_name"
-            android:inputType="text|textNoSuggestions|textCapSentences"
             android:defaultValue="" />
         <ListPreference
             android:key="vpn_protocol"
@@ -19,7 +18,6 @@
             android:key="server_address"
             android:title="@string/server_address"
             android:dialogMessage="@string/add_profile_hostname_prompt"
-            android:inputType="textUri"
             android:defaultValue="" />
         <net.openconnect_vpn.android.ShowTextPreference
             android:key="ca_certificate"
@@ -111,7 +109,6 @@
             android:key="split_tunnel_networks"
             android:title="@string/split_tunnel_networks"
             android:dialogMessage="@string/split_tunnel_networks_message"
-            android:inputType="textUri|textMultiLine"
             android:defaultValue="" />
         <EditTextPreference
             android:defaultValue=""
@@ -138,7 +135,6 @@
             android:title="@string/dpd_value"
             android:dependency="dpd_override"
             android:dialogMessage="@string/dpd_value_message"
-            android:inputType="number"
             android:defaultValue="" />
     </PreferenceCategory>
     <Preference
