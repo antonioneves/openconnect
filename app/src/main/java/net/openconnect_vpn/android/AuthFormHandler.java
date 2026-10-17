@@ -32,7 +32,8 @@ import org.infradead.libopenconnect.LibOpenConnect;
 
 import net.openconnect_vpn.android.core.UserDialog;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -474,7 +475,7 @@ public class AuthFormHandler extends UserDialog
 			return;
 		}
 
-		mAlert = new AlertDialog.Builder(mContext)
+		mAlert = new MaterialAlertDialogBuilder(mContext)
 				.setView(v)
 				.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
 				.setPositiveButton(R.string.ok, h)

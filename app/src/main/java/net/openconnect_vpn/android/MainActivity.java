@@ -28,22 +28,20 @@ package net.openconnect_vpn.android;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.tabs.TabLayout;
 import net.openconnect_vpn.android.core.OpenConnectManagementThread;
 import net.openconnect_vpn.android.core.OpenVpnService;
 import net.openconnect_vpn.android.core.VPNConnector;
 import net.openconnect_vpn.android.fragments.*;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
 	public static final String TAG = "OpenConnect";
 
-	private ActionBar mBar;
+	private TabLayout mTabs;
 
 	private ArrayList<TabContainer> mTabList = new ArrayList<TabContainer>();
 
@@ -64,8 +62,23 @@ public class MainActivity extends Activity {
 			mLastTab = savedInstanceState.getInt("active_tab");
 		}
 
-		mBar = getActionBar();
-		mBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		setContentView(R.layout.activity_main);
+		mTabs = findViewById(R.id.tabs);
+		mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab t) {
+				((TabContainer)t.getTag()).onTabSelected(t);
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab t) {
+				((TabContainer)t.getTag()).onTabUnselected(t);
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab t) {
+			}
+		});
 
 		mTabList.add(new TabContainer(0, R.string.vpn_list_title, new VPNProfileList()));
 		mTabList.add(new TabContainer(1, R.string.log, new LogFragment()));
@@ -100,10 +113,7 @@ public class MainActivity extends Activity {
 			// NOTE: addTab may cause mLastTab to change, so cache the value here
 			int lastTab = mLastTab;
 			for (TabContainer tc : mTabList) {
-				mBar.addTab(tc.tab);
-				if (tc.idx == lastTab) {
-					mBar.selectTab(tc.tab);
-				}
+				mTabs.addTab(tc.tab, tc.idx == lastTab);
 			}
 			mTabsActive = true;
 		}
@@ -128,10 +138,10 @@ public class MainActivity extends Activity {
 		super.onPause();
 	}
 
-	protected class TabContainer implements ActionBar.TabListener {
+	protected class TabContainer implements TabLayout.OnTabSelectedListener {
 		private Fragment mFragment;
 		private boolean mActive;
-		public Tab tab;
+		public TabLayout.Tab tab;
 		public int idx;
 
 		public void replace(int titleResId, Fragment frag) {
@@ -145,7 +155,7 @@ public class MainActivity extends Activity {
 			if (idx == mLastTab) {
 				getFragmentManager().beginTransaction()
 					.setCustomAnimations(R.animator.fade_in, R.animator.fade_out)
-					.replace(android.R.id.content, mFragment)
+					.replace(R.id.fragment_container, mFragment)
 					.commit();
 				mActive = true;
 			} else {
@@ -156,13 +166,12 @@ public class MainActivity extends Activity {
 		public TabContainer(int idx, int titleResId, Fragment frag) {
 			this.idx = idx;
 			this.mFragment = frag;
-			tab = getActionBar().newTab()
-					.setText(titleResId)
-					.setTabListener(this);
+			tab = mTabs.newTab().setText(titleResId).setTag(this);
 		}
 
 		@Override
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		public void onTabSelected(TabLayout.Tab t) {
+			android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
 			if (mTabsActive) {
 				if (idx < mLastTab) {
 					ft.setCustomAnimations(R.animator.fragment_slide_right_enter,
@@ -174,20 +183,18 @@ public class MainActivity extends Activity {
 			}
 
 			mLastTab = idx;
-			ft.replace(android.R.id.content, mFragment);
+			ft.replace(R.id.fragment_container, mFragment).commit();
 			mActive = true;
 		}
 
 		@Override
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			if (mActive) {
-				ft.remove(mFragment);
-				mActive = false;
-			}
+		public void onTabUnselected(TabLayout.Tab t) {
+			// the newly selected tab replaces this fragment
+			mActive = false;
 		}
 
 		@Override
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		public void onTabReselected(TabLayout.Tab t) {
 		}
 	}
 }

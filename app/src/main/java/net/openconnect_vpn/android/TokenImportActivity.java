@@ -30,8 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -51,7 +52,7 @@ import net.openconnect_vpn.android.core.AssetExtractor;
 import net.openconnect_vpn.android.core.ProfileManager;
 import org.stoken.LibStoken;
 
-public class TokenImportActivity extends Activity {
+public class TokenImportActivity extends AppCompatActivity {
 
 	public static final String TAG = "OpenConnect";
 
@@ -406,7 +407,7 @@ public class TokenImportActivity extends Activity {
 	@Override
 	public void onActivityResult(int idx, int resultCode, Intent data) {
 		super.onActivityResult(idx, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
+		if (resultCode == RESULT_OK) {
 			readFromFile(data.getData());
 			return;
 		}
@@ -529,7 +530,7 @@ public class TokenImportActivity extends Activity {
     		return;
     	}
 
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
     	if (newAlert == ALERT_BAD_TOKEN) {
     		builder.setTitle(R.string.token_bad_string_title);
     		builder.setMessage(R.string.token_bad_string_summary);

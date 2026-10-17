@@ -25,6 +25,7 @@
 package net.openconnect_vpn.android;
 
 import android.content.pm.PackageManager;
+import com.google.android.material.color.DynamicColors;
 import net.openconnect_vpn.android.core.FragCache;
 import net.openconnect_vpn.android.core.ProfileManager;
 import net.openconnect_vpn.android.core.VPNLog;
@@ -43,6 +44,8 @@ public class Application extends android.app.Application {
 
 	public void onCreate() {
 		super.onCreate();
+
+		DynamicColors.applyToActivitiesIfAvailable(this);
 
 		System.loadLibrary("openconnect");
 		System.loadLibrary("stoken");

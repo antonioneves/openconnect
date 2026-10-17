@@ -26,14 +26,15 @@ package net.openconnect_vpn.android;
 
 import net.openconnect_vpn.android.core.ProfileManager;
 import net.openconnect_vpn.android.fragments.ConnectionEditorFragment;
-import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ConnectionEditorActivity extends Activity {
+public class ConnectionEditorActivity extends AppCompatActivity {
 
     private String mName = "";
     private String mUUID;
@@ -41,6 +42,7 @@ public class ConnectionEditorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_frag);
 
         ConnectionEditorFragment frag = new ConnectionEditorFragment();
         mUUID = getIntent().getStringExtra(getPackageName() + ".profileUUID");
@@ -50,7 +52,7 @@ public class ConnectionEditorActivity extends Activity {
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, frag)
+                .replace(R.id.fragment_container, frag)
                 .commit();
     }
 
@@ -73,7 +75,7 @@ public class ConnectionEditorActivity extends Activity {
 	}
 
 	public void askProfileRemoval() {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		AlertDialog.Builder dialog = new MaterialAlertDialogBuilder(this);
 		dialog.setTitle("Confirm deletion");
 		dialog.setMessage(getString(R.string.remove_vpn_query, mName));
 

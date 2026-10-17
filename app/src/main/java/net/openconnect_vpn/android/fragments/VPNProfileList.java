@@ -31,7 +31,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -274,7 +275,7 @@ public class VPNProfileList extends ListFragment {
 			mDialogEntry = (EditText)v.findViewById(R.id.entry);
 			mDialogEntry.setText(savedEntry);
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(context)
+			AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context)
 				.setTitle(R.string.menu_add_profile)
 				.setMessage(R.string.add_profile_hostname_prompt)
 				.setView(v);

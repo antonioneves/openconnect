@@ -36,7 +36,7 @@
 	    <View
 	    	android:layout_width="1dp"
 	    	android:layout_height="fill_parent"
-	    	android:background="@android:color/darker_gray"/>
+	    	android:background="?attr/colorOutlineVariant"/>
 
 	    <Button
 	        android:id="@+id/copy_button"
@@ -53,7 +53,7 @@
     	android:layout_height="1dp"
     	android:paddingTop="10dp"
     	android:paddingBottom="10dp"
-    	android:background="@android:color/darker_gray"/>
+    	android:background="?attr/colorOutlineVariant"/>
 
 	<!-- row 3: next tokencode, using_pin -->
     <LinearLayout
@@ -83,7 +83,7 @@
 	<View
 		android:layout_width="fill_parent"
 		android:layout_height="1dp"
-		android:background="@android:color/darker_gray"/>
+		android:background="?attr/colorOutlineVariant"/>
 
 	<!-- row 4: token S/N, exp date -->
     <LinearLayout
@@ -113,7 +113,7 @@
 	<View
 		android:layout_width="fill_parent"
 		android:layout_height="1dp"
-		android:background="@android:color/darker_gray"/>
+		android:background="?attr/colorOutlineVariant"/>
 
 	<!-- row 5: GMT, device ID -->
     <LinearLayout
@@ -143,6 +143,6 @@
 	<View
 		android:layout_width="fill_parent"
 		android:layout_height="1dp"
-		android:background="@android:color/darker_gray"/>
+		android:background="?attr/colorOutlineVariant"/>
 
 </LinearLayout>

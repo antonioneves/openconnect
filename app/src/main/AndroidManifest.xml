@@ -28,7 +28,7 @@
         android:label="@string/app"
         android:supportsRtl="true"
         android:name="net.openconnect_vpn.android.Application"
-        android:theme="@android:style/Theme.Material">
+        android:theme="@style/Theme.OpenConnect">
         <activity
             android:name=".ConnectionEditorActivity" />
         <activity
@@ -86,7 +86,6 @@
         <activity
             android:exported="true"
             android:name=".MainActivity"
-            android:uiOptions="splitActionBarWhenNarrow"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

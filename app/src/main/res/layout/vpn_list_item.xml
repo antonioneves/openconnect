@@ -43,7 +43,7 @@
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
 
     </LinearLayout>
 
@@ -53,7 +53,7 @@
         android:layout_marginBottom="5dip"
         android:focusable="false"
         android:layout_marginTop="5dip"
-        android:background="@android:drawable/divider_horizontal_dark" />
+        android:background="?attr/colorOutlineVariant" />
 
     <ImageView
         android:id="@+id/quickedit_settings"

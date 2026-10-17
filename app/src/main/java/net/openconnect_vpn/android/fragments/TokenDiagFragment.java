@@ -31,7 +31,8 @@ import java.util.TimeZone;
 import org.stoken.LibStoken;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -294,7 +295,7 @@ public class TokenDiagFragment extends Fragment {
 		tv.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		tv.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-    	AlertDialog.Builder builder = new AlertDialog.Builder(ctx)
+    	AlertDialog.Builder builder = new MaterialAlertDialogBuilder(ctx)
     		.setView(tv)
     		.setTitle(R.string.enter_pin)
     		.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

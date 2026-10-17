@@ -14,7 +14,7 @@
             android:id="@+id/connection_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
             android:gravity="start" />
 
         <Space
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
             android:gravity="end" />
 
     </LinearLayout>
@@ -35,7 +35,7 @@
     <View
     	android:layout_width="fill_parent"
     	android:layout_height="1dp"
-    	android:background="@android:color/darker_gray"/>
+    	android:background="?attr/colorOutlineVariant"/>
 
     <LinearLayout
         android:id="@+id/connection_rows"
@@ -72,7 +72,7 @@
 	    <View
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="1dp"
-	    	android:background="@android:color/darker_gray"/>
+	    	android:background="?attr/colorOutlineVariant"/>
 
 	    <!-- row 3: server name -->
 	    <LinearLayout
@@ -91,7 +91,7 @@
 	    <View
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="1dp"
-	    	android:background="@android:color/darker_gray"/>
+	    	android:background="?attr/colorOutlineVariant"/>
 
 	    <!-- row 4: local IPv4, netmask -->
 	    <LinearLayout
@@ -121,7 +121,7 @@
 	    <View
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="1dp"
-	    	android:background="@android:color/darker_gray"/>
+	    	android:background="?attr/colorOutlineVariant"/>
 
 	    <!-- row 5: local IPv6 (this can be wide so it deserves a dedicated row) -->
 	    <LinearLayout
@@ -140,7 +140,7 @@
    		<View
    			android:layout_width="fill_parent"
    			android:layout_height="1dp"
-   			android:background="@android:color/darker_gray"/>
+   			android:background="?attr/colorOutlineVariant"/>
 
     </LinearLayout>
 

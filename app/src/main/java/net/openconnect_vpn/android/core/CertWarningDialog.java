@@ -25,7 +25,8 @@
 package net.openconnect_vpn.android.core;
 
 import net.openconnect_vpn.android.R;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -59,7 +60,7 @@ public class CertWarningDialog extends UserDialog
 	@Override
 	public void onStart(Context context) {
 		super.onStart(context);
-		mAlert = new AlertDialog.Builder(context)
+		mAlert = new MaterialAlertDialogBuilder(context)
 			.setTitle(R.string.cert_warning_title)
 			.setMessage(context.getString(R.string.cert_warning_message,
 					mHostname, mReason, mCertSHA1))

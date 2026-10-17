@@ -16,9 +16,10 @@
 
 package net.openconnect_vpn.android.api;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.appcompat.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.pm.ApplicationInfo;
@@ -32,7 +33,7 @@ import android.widget.TextView;
 import net.openconnect_vpn.android.R;
 
 
-public class ConfirmDialog extends Activity implements
+public class ConfirmDialog extends AppCompatActivity implements
 CompoundButton.OnCheckedChangeListener, DialogInterface.OnClickListener {
 	private static final String TAG = "OpenVPNVpnConfirm";
 
@@ -63,7 +64,7 @@ CompoundButton.OnCheckedChangeListener, DialogInterface.OnClickListener {
 			((CompoundButton) view.findViewById(R.id.check)).setOnCheckedChangeListener(this);
 
 
-			Builder builder = new AlertDialog.Builder(this);
+			Builder builder = new MaterialAlertDialogBuilder(this);
 
 			builder.setView(view);
 

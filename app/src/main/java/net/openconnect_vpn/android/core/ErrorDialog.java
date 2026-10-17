@@ -24,7 +24,8 @@
 
 package net.openconnect_vpn.android.core;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -46,7 +47,7 @@ public class ErrorDialog extends UserDialog
 	@Override
 	public void onStart(Context context) {
 		super.onStart(context);
-		mAlert = new AlertDialog.Builder(context)
+		mAlert = new MaterialAlertDialogBuilder(context)
 			.setTitle(mTitle)
 			.setMessage(mMessage)
 			.setPositiveButton(android.R.string.ok, this)

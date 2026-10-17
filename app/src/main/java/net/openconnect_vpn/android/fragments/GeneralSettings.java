@@ -28,8 +28,9 @@ import java.io.File;
 import java.util.Map;
 
 import android.Manifest.permission;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.appcompat.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -152,7 +153,7 @@ public class GeneralSettings extends PreferenceFragment
 	@Override
 	public boolean onPreferenceClick(Preference preference) { 
 		if(preference.getKey().equals("clearapi")){
-			Builder builder = new AlertDialog.Builder(getActivity());
+			Builder builder = new MaterialAlertDialogBuilder(getActivity());
 			builder.setPositiveButton(R.string.clear, this);
 			builder.setNegativeButton(android.R.string.cancel, null);
 			builder.setMessage(getString(R.string.clearappsdialog,getExtAppList("\n")));

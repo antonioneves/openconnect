@@ -25,7 +25,7 @@
 	    	android:layout_height="1dp"
 	    	android:layout_marginTop="10dp"
 	    	android:layout_marginBottom="10dp"
-	    	android:background="@android:color/darker_gray"/>
+	    	android:background="?attr/colorOutlineVariant"/>
 
 	    <Button
 	        android:id="@+id/reconnect_button"
@@ -39,13 +39,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:padding="24dp"
         android:orientation="vertical" >
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_vpn_profiles_defined"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
 
         <Space
             android:layout_width="match_parent"
