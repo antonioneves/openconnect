@@ -45,8 +45,7 @@ public class CommonMenu {
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(Menu.NONE, MENU_SECURID, Menu.NONE, R.string.securid_info)
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		menu.add(Menu.NONE, MENU_ABOUT, Menu.NONE,
-				ctx.getString(R.string.faq) + " & " + ctx.getString(R.string.about_openconnect))
+		menu.add(Menu.NONE, MENU_ABOUT, Menu.NONE, R.string.about_openconnect)
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 	}
 
