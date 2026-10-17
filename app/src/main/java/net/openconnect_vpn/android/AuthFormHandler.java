@@ -87,11 +87,14 @@ public class AuthFormHandler extends UserDialog
 		formPfx = getFormPrefix(mForm);
 		noSave = getBooleanPref("disable_username_caching");
 
+		// Only prompt when something is missing or the server rejects what we sent
+		// (see below), unless the profile explicitly asks to always prompt or never prompt.
+		// "disabled" was the old default, so it is treated like an unset value.
 		String s = getStringPref("batch_mode");
-		if (s.equals("empty_only")) {
-			batchMode = BATCH_MODE_EMPTY_ONLY;
-		} else if (s.equals("enabled")) {
+		if (s.equals("enabled")) {
 			batchMode = BATCH_MODE_ENABLED;
+		} else if (!s.equals("always_prompt")) {
+			batchMode = BATCH_MODE_EMPTY_ONLY;
 		}
 
 		// If the server is sending us the same form twice in a row, that probably

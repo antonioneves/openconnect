@@ -41,7 +41,7 @@
             android:dialogTitle="@string/software_token"
             android:entries="@array/software_token_entries"
             android:entryValues="@array/software_token_values"
-            android:defaultValue="disabled" />
+            android:defaultValue="empty_only" />
         <net.openconnect_vpn.android.ShowTextPreference
             android:key="token_string"
             android:title="@string/token_string"
