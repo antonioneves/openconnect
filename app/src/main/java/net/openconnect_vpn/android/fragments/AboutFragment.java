@@ -35,7 +35,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
+import com.google.android.material.tabs.TabLayout;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.core.AssetExtractor;
 import net.openconnect_vpn.android.core.FaqHtml;
@@ -51,34 +51,46 @@ public class AboutFragment extends Fragment  {
     	Activity activity = getActivity();
 
     	View v = inflater.inflate(R.layout.about, container, false);
-    	TextView ver = (TextView) v.findViewById(R.id.version);
 
 		try {
 			PackageInfo packageinfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-			ver.setText("OpenConnect for Android v" + packageinfo.versionName);
+			activity.setTitle(activity.getString(R.string.app) + " v" + packageinfo.versionName);
 		} catch (NameNotFoundException e) {
 			Log.e(TAG, "can't retrieve package version");
 		}
 
-    	WebView contents = (WebView)v.findViewById(R.id.about_contents);
-    	// the FAQ comes first, followed by the credits from about.html
-    	String about = AssetExtractor.readString(activity, "about.html");
-    	int start = about.indexOf("<body>") + "<body>".length();
-    	int end = about.lastIndexOf("</body>");
+    	final WebView contents = (WebView)v.findViewById(R.id.about_contents);
+    	contents.setBackgroundColor(0);
+    	showPage(contents, 0);
 
+    	TabLayout tabs = (TabLayout) v.findViewById(R.id.about_tabs);
+    	tabs.addTab(tabs.newTab().setText(R.string.faq));
+    	tabs.addTab(tabs.newTab().setText(R.string.credits));
+    	tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+    		@Override public void onTabSelected(TabLayout.Tab tab) { showPage(contents, tab.getPosition()); }
+    		@Override public void onTabUnselected(TabLayout.Tab tab) { }
+    		@Override public void onTabReselected(TabLayout.Tab tab) { }
+    	});
+
+    	return v;
+    }
+
+    private void showPage(WebView contents, int page) {
+    	Activity activity = getActivity();
     	StringBuilder html = new StringBuilder();
     	html.append("<html><head><meta charset=\"UTF-8\">");
     	html.append(WebColors.style(activity));
     	html.append("</head><body>");
-    	html.append("<h2>" + activity.getString(R.string.faq) + "</h2>");
-    	html.append(FaqHtml.build(activity));
-    	html.append("<h2>" + activity.getString(R.string.about_openconnect) + "</h2>");
-    	html.append(about.substring(start, end));
+    	if (page == 0) {
+    		html.append(FaqHtml.build(activity));
+    	} else {
+    		String about = AssetExtractor.readString(activity, "about.html");
+    		int start = about.indexOf("<body>") + "<body>".length();
+    		int end = about.lastIndexOf("</body>");
+    		html.append(about.substring(start, end));
+    	}
     	html.append("</body></html>");
     	contents.loadDataWithBaseURL("file:///android_asset/", html.toString(), null, null, null);
-    	contents.setBackgroundColor(0);
-
-    	return v;
     }
 
 }

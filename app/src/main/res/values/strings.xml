@@ -51,6 +51,7 @@
 
     <string name="copied_entry">Copied to clipboard.</string>
     <string name="faq">FAQ</string>
+    <string name="credits">Credits</string>
     <string name="question_abbrev">Q:</string>
     <string name="answer_abbrev">A:</string>
     <string name="speed_waiting">Waiting for state message…</string>
