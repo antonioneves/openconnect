@@ -80,6 +80,7 @@ public class AboutFragment extends Fragment  {
     	StringBuilder html = new StringBuilder();
     	html.append("<html><head><meta charset=\"UTF-8\">");
     	html.append(WebColors.style(activity));
+    	html.append("<style>body{margin:16px}</style>");
     	html.append("</head><body>");
     	if (page == 0) {
     		html.append(FaqHtml.build(activity));
