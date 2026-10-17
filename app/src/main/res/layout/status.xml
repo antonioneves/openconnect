@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/stdpadding"
+    android:paddingRight="@dimen/stdpadding"
+    android:paddingTop="@dimen/stdpadding" >
 
     <!-- row 1: general connection info -->
     <LinearLayout
