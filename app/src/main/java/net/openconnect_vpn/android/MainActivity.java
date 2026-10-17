@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
 		mTabsActive = false;
 		if (savedInstanceState != null) {
 			mLastTab = savedInstanceState.getInt("active_tab");
+			if (mLastTab >= 2) {
+				// the FAQ used to be a tab; it now lives in the overflow menu
+				mLastTab = 0;
+			}
 		}
 
 		setContentView(R.layout.activity_main);
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
 		mTabList.add(new TabContainer(0, R.string.vpn_list_title, new VPNProfileList()));
 		mTabList.add(new TabContainer(1, R.string.log, new LogFragment()));
-		mTabList.add(new TabContainer(2, R.string.faq, new FaqFragment()));
 
 		mConnectionTab = mTabList.get(0);
 

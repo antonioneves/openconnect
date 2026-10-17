@@ -34,6 +34,7 @@ import net.openconnect_vpn.android.R;
 public class CommonMenu {
 
 	private static final int MENU_SETTINGS = 15;
+	private static final int MENU_FAQ = 25;
 	private static final int MENU_SECURID = 20;
 	private static final int MENU_ABOUT = 30;
 
@@ -42,6 +43,8 @@ public class CommonMenu {
 	public CommonMenu(Context ctx, Menu menu, boolean isConnected) {
 		mContext = ctx;
 		menu.add(Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.generalsettings)
+			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+		menu.add(Menu.NONE, MENU_FAQ, Menu.NONE, R.string.faq)
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		menu.add(Menu.NONE, MENU_SECURID, Menu.NONE, R.string.securid_info)
 			.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -60,6 +63,8 @@ public class CommonMenu {
 		final int itemId = item.getItemId();
 		if (itemId == MENU_ABOUT) {
 			return startFragActivity("AboutFragment");
+		} else if (itemId == MENU_FAQ) {
+			return startFragActivity("FaqFragment");
 		} else if (itemId == MENU_SECURID) {
 			return startFragActivity("TokenParentFragment");
 		} else if (itemId == MENU_SETTINGS) {

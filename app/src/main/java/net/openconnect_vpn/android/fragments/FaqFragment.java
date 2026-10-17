@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.core.AssetExtractor;
+import net.openconnect_vpn.android.core.WebColors;
 
 public class FaqFragment extends Fragment  {
 
@@ -91,6 +92,7 @@ public class FaqFragment extends Fragment  {
     	String items[] = getResources().getStringArray(R.array.faq_text);
     	StringBuilder html = new StringBuilder();
     	html.append(AssetExtractor.readString(act, "header.html"));
+    	html.append(WebColors.style(act));
 
     	// "Q: " and "A: "
     	String q_abbrev = act.getString(R.string.question_abbrev) + " ";

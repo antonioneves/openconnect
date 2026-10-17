@@ -37,6 +37,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 import net.openconnect_vpn.android.R;
+import net.openconnect_vpn.android.core.AssetExtractor;
+import net.openconnect_vpn.android.core.WebColors;
 
 public class AboutFragment extends Fragment  {
 
@@ -58,7 +60,9 @@ public class AboutFragment extends Fragment  {
 		}
 
     	WebView contents = (WebView)v.findViewById(R.id.about_contents);
-    	contents.loadUrl("file:///android_asset/about.html");
+    	contents.loadDataWithBaseURL("file:///android_asset/",
+    			WebColors.style(activity) + AssetExtractor.readString(activity, "about.html"),
+    			null, null, null);
     	contents.setBackgroundColor(0);
 
     	return v;
