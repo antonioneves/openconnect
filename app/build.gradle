@@ -31,7 +31,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             if (file("release.properties").exists()) {
                 signingConfig signingConfigs.release
             }
@@ -41,7 +41,7 @@ android {
         includeInApk = false
         includeInBundle = false
     }
-    lintOptions {
+    lint {
         disable 'ExtraTranslation'
         disable 'IconColors'
         disable 'InconsistentArrays'
@@ -53,6 +53,10 @@ android {
         disable 'StaticFieldLeak'
 
         baseline file("lint-baseline.xml")
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_25
+        targetCompatibility JavaVersion.VERSION_25
     }
     buildFeatures {
         aidl true
