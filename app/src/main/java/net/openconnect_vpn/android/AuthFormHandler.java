@@ -91,7 +91,9 @@ public class AuthFormHandler extends UserDialog
 		// (see below), unless the profile explicitly asks to always prompt or never prompt.
 		// "disabled" was the old default, so it is treated like an unset value.
 		String s = getStringPref("batch_mode");
-		if (s.equals("enabled")) {
+		if (noSave || getBooleanPref("always_ask_credentials")) {
+			batchMode = BATCH_MODE_DISABLED;
+		} else if (s.equals("enabled")) {
 			batchMode = BATCH_MODE_ENABLED;
 		} else if (!s.equals("always_prompt")) {
 			batchMode = BATCH_MODE_EMPTY_ONLY;

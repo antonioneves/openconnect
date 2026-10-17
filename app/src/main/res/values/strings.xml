@@ -135,6 +135,8 @@
     <string name="not_required">Not required</string>
     <string name="unknown">Unknown</string>
     <string name="batch_mode">Batch mode</string>
+    <string name="always_ask_credentials">Always ask for credentials</string>
+    <string name="always_ask_credentials_summary">Show the login dialog on every connection, even if credentials are saved</string>
     <string name="reported_os">Reported OS</string>
     <string name="reported_user_agent_override">Override reported User-Agent</string>
     <string name="reported_user_agent_override_summary">Use a custom HTTP User-Agent header, instead of OpenConnect\'s default; some servers are picky about this value.</string>

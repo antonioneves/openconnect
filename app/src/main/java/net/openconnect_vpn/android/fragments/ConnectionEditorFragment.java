@@ -38,6 +38,7 @@ import net.openconnect_vpn.android.core.ProfileManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -82,6 +83,7 @@ public class ConnectionEditorFragment extends PreferenceFragmentCompat
         MaterialPreferenceDialogs.removeIconSpace(getPreferenceScreen());
         setInputTypes();
         setClickListeners();
+        updateAlwaysAsk(mPrefs.getSharedPreferences());
 
         // FIXME: populate the vpn_protocol list dynamically using mOC.getSupportedProtocols()
         // Preference = (ListPreference)mPrefs.findPreference("vpn_protocol");
@@ -214,6 +216,27 @@ public class ConnectionEditorFragment extends PreferenceFragmentCompat
 
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
 		updatePref(sp, key);
+		if (key.equals("disable_username_caching")) {
+			updateAlwaysAsk(sp);
+		}
+	}
+
+	/* nothing is saved when credential caching is disabled, so the dialog always appears:
+	 * show "always ask" as checked and locked, without overwriting the stored choice */
+	private void updateAlwaysAsk(SharedPreferences sp) {
+		CheckBoxPreference pref = findPreference("always_ask_credentials");
+		if (pref == null) {
+			return;
+		}
+		if (sp.getBoolean("disable_username_caching", false)) {
+			pref.setPersistent(false);
+			pref.setChecked(true);
+			pref.setEnabled(false);
+		} else {
+			pref.setPersistent(true);
+			pref.setChecked(sp.getBoolean("always_ask_credentials", false));
+			pref.setEnabled(true);
+		}
 	}
 
 	private void setClickListeners() {
