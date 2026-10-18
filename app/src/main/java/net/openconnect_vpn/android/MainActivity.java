@@ -29,6 +29,8 @@ package net.openconnect_vpn.android;
 import java.util.ArrayList;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.view.View;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.tabs.TabLayout;
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_main);
 		mTabs = findViewById(R.id.tabs);
+		// the TV layout has no overflow menu, so it carries Settings and About as buttons
+		bindFragButton(R.id.tv_settings, "GeneralSettings");
+		bindFragButton(R.id.tv_about, "AboutFragment");
 		mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
 			public void onTabSelected(TabLayout.Tab t) {
@@ -90,6 +95,20 @@ public class MainActivity extends AppCompatActivity {
 		mConnectionTab = mTabList.get(0);
 
 		FeedbackFragment.recordUse(this, false);
+	}
+
+	private void bindFragButton(int id, final String fragName) {
+		View b = findViewById(id);
+		if (b != null) {
+			b.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(MainActivity.this, FragActivity.class);
+					intent.putExtra(FragActivity.EXTRA_FRAGMENT_NAME, fragName);
+					startActivity(intent);
+				}
+			});
+		}
 	}
 
 	@Override
