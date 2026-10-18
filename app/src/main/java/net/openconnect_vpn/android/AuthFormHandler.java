@@ -480,14 +480,10 @@ public class AuthFormHandler extends UserDialog
 			return;
 		}
 
-		mAlert = new MaterialAlertDialogBuilder(mContext)
-				.setView(v)
-				.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
-				.setPositiveButton(R.string.ok, h)
-				.setNegativeButton(R.string.cancel, h)
-				.create();
-		mAlert.setOnDismissListener(h);
-
+		// the message goes inside the scrolling area with the fields, so a dialog
+		// squeezed by the keyboard still leaves room to reach them
+		android.widget.LinearLayout box = new android.widget.LinearLayout(mContext);
+		box.setOrientation(android.widget.LinearLayout.VERTICAL);
 		if (mForm.message != null) {
 			// Truncate long messages so they don't ruin the dialog
 			String s = mForm.message.trim();
@@ -495,10 +491,36 @@ public class AuthFormHandler extends UserDialog
 				s = s.substring(0, 128);
 			}
 			if (s.length() > 0) {
-				mAlert.setMessage(s);
+				TextView msg = new TextView(mContext);
+				msg.setText(s);
+				int pad = (int)(24 * mContext.getResources().getDisplayMetrics().density);
+				msg.setPadding(pad, 0, pad, 0);
+				box.addView(msg);
 			}
 		}
+		box.addView(v);
+		android.widget.ScrollView sv = new android.widget.ScrollView(mContext);
+		sv.addView(box);
 
+		mAlert = new MaterialAlertDialogBuilder(mContext)
+				.setView(sv)
+				.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
+				.setPositiveButton(R.string.ok, h)
+				.setNegativeButton(R.string.cancel, h)
+				.create();
+		mAlert.setOnDismissListener(h);
+
+		if (mContext.getPackageManager().hasSystemFeature(
+				android.content.pm.PackageManager.FEATURE_LEANBACK)) {
+			// the TV keyboard only covers the lower part of the screen: keep the dialog
+			// at the top at its natural size instead of letting it get squeezed
+			mAlert.getWindow().setSoftInputMode(
+					android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+			mAlert.getWindow().setGravity(android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL);
+		} else {
+			mAlert.getWindow().setSoftInputMode(
+					android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+		}
 		mAlert.show();
 
 		TextView focus = mFirstEmptyText != null ? mFirstEmptyText : mFirstText;

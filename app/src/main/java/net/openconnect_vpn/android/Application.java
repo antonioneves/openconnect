@@ -24,7 +24,10 @@
 
 package net.openconnect_vpn.android;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.WindowManager;
 import com.google.android.material.color.DynamicColors;
 import net.openconnect_vpn.android.core.FragCache;
 import net.openconnect_vpn.android.core.ProfileManager;
@@ -46,6 +49,24 @@ public class Application extends android.app.Application {
 		super.onCreate();
 
 		DynamicColors.applyToActivitiesIfAvailable(this);
+
+		if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+			// the TV keyboard floats over the screen: panning or resizing the
+			// activity only leaves a black band under the app
+			registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+				@Override
+				public void onActivityCreated(Activity a, Bundle b) {
+					a.getWindow().setSoftInputMode(
+							WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+				}
+				@Override public void onActivityStarted(Activity a) {}
+				@Override public void onActivityResumed(Activity a) {}
+				@Override public void onActivityPaused(Activity a) {}
+				@Override public void onActivityStopped(Activity a) {}
+				@Override public void onActivitySaveInstanceState(Activity a, Bundle b) {}
+				@Override public void onActivityDestroyed(Activity a) {}
+			});
+		}
 
 		System.loadLibrary("openconnect");
 		System.loadLibrary("stoken");
