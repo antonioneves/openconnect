@@ -28,6 +28,8 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.color.DynamicColors;
 import net.openconnect_vpn.android.core.FragCache;
 import net.openconnect_vpn.android.core.ProfileManager;
@@ -45,8 +47,21 @@ public class Application extends android.app.Application {
 		}
 	}
 
+	public static void applyTheme(String value) {
+		int mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+		if ("light".equals(value)) {
+			mode = AppCompatDelegate.MODE_NIGHT_NO;
+		} else if ("dark".equals(value)) {
+			mode = AppCompatDelegate.MODE_NIGHT_YES;
+		}
+		// recreates the running activities only when the mode actually changes
+		AppCompatDelegate.setDefaultNightMode(mode);
+	}
+
 	public void onCreate() {
 		super.onCreate();
+
+		applyTheme(PreferenceManager.getDefaultSharedPreferences(this).getString("app_theme", "system"));
 
 		DynamicColors.applyToActivitiesIfAvailable(this);
 

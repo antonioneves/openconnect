@@ -71,6 +71,17 @@
         <item>on_uplink_dns</item>
     </string-array>
 
+    <string-array name="app_theme_entries">
+        <item>@string/theme_system</item>
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+    </string-array>
+    <string-array name="app_theme_values" translatable="false">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
     <string-array name="log_timestamp_entries" translatable="false">
         <item>@string/timestamp_short</item>
         <item>@string/timestamp_long</item>

@@ -48,6 +48,7 @@ import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.Preference.OnPreferenceClickListener;
 import androidx.preference.PreferenceFragmentCompat;
 import net.openconnect_vpn.android.MaterialPreferenceDialogs;
+import net.openconnect_vpn.android.Application;
 import net.openconnect_vpn.android.R;
 import net.openconnect_vpn.android.api.ExternalAppDatabase;
 import net.openconnect_vpn.android.core.DeviceStateReceiver;
@@ -112,6 +113,9 @@ public class GeneralSettings extends PreferenceFragmentCompat
 			ListPreference lpref = (ListPreference)pref;
 			lpref.setValue(sp.getString(key, ""));
 			pref.setSummary(lpref.getEntry());
+			if ("app_theme".equals(key)) {
+				Application.applyTheme(lpref.getValue());
+			}
 		}
     }
 

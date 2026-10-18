@@ -97,6 +97,11 @@
     <string name="screenoff_title">Pause when asleep</string>
     <string name="save_password">Save Password</string>
     <string name="cannotparsecert">Cannot display certificate information</string>
+    <string name="appearance">Appearance</string>
+    <string name="app_theme">Theme</string>
+    <string name="theme_system">Follow device setting</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
     <string name="vpnbehaviour">VPN behavior</string>
     <string name="allow_vpn_changes">Allow changes to VPN Profiles</string>
     <!-- OpenConnect preference strings -->
