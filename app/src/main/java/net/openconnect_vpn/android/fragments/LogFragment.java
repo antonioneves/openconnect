@@ -41,7 +41,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.pm.PackageManager;
+import android.database.DataSetObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +63,15 @@ public class LogFragment extends ListFragment {
 
 	private CommonMenu mDropdown;
     private MenuItem mCancelButton;
+    private Button mActionButton;
+    private View mClearButton;
+    private final DataSetObserver mLogObserver = new DataSetObserver() {
+    	@Override
+    	public void onChanged() {
+    		updateClearButton();
+    	}
+    };
+    private boolean mIsTv;
     private boolean mDisconnected;
 
 	private LogArrayAdapter mLogAdapter;
@@ -120,6 +132,19 @@ public class LogFragment extends ListFragment {
 				mCancelButton.setTitleCondensed(title);
     		}
 
+    		if (mActionButton != null) {
+    			// same behaviour as the "cancel" menu item: Disconnect, or Reconnect when possible
+    			if (state == OpenConnectManagementThread.STATE_DISCONNECTED) {
+    				mDisconnected = true;
+    				mActionButton.setText(R.string.reconnect);
+    				mActionButton.setVisibility(service.getReconnectName() != null ? View.VISIBLE : View.GONE);
+    			} else {
+    				mDisconnected = false;
+    				mActionButton.setText(R.string.disconnect);
+    				mActionButton.setVisibility(View.VISIBLE);
+    			}
+    		}
+
     		String byteCountSummary = "";
     		if (state == OpenConnectManagementThread.STATE_CONNECTED) {
 				byteCountSummary = " - " + mConn.getByteCountSummary();
@@ -131,7 +156,9 @@ public class LogFragment extends ListFragment {
     			mLogAdapter = service.getArrayAdapter(mActivity);
     			mLogView.setAdapter(mLogAdapter);
     			mLogView.setSelection(mLogAdapter.getCount());
+    			mLogAdapter.registerDataSetObserver(mLogObserver);
     		}
+    		updateClearButton();
 
     		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
     		mLogAdapter.setTimeFormat(prefs.getString("timestamp_format", VPNLog.DEFAULT_TIME_FORMAT));
@@ -150,9 +177,27 @@ public class LogFragment extends ListFragment {
 		};
 	}
 
+	/* on TV, "Clear log" is only offered while there is something to clear */
+	private void updateClearButton() {
+		final View b = mClearButton;
+		final LogArrayAdapter adapter = mLogAdapter;
+		if (b != null && adapter != null) {
+			// the log is written from the VPN thread
+			b.post(new Runnable() {
+				@Override
+				public void run() {
+					b.setVisibility(adapter.getCount() > 0 ? View.VISIBLE : View.GONE);
+				}
+			});
+		}
+	}
+
 	@Override
 	public void onPause() {
 		if (mConn.service != null) {
+    		if (mLogAdapter != null) {
+    			mLogAdapter.unregisterDataSetObserver(mLogObserver);
+    		}
     		mConn.service.putArrayAdapter(mLogAdapter);
     		mLogAdapter = null;
 		}
@@ -163,7 +208,9 @@ public class LogFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+		// the TV layout has these actions as buttons at the bottom of the page instead
+		mIsTv = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+		setHasOptionsMenu(!mIsTv);
 	}
 
     @Override
@@ -189,6 +236,32 @@ public class LogFragment extends ListFragment {
 		});
 
 		mSpeedView = (TextView)v.findViewById(R.id.speed);
+
+		mActionButton = (Button)v.findViewById(R.id.log_action);
+		if (mActionButton != null) {
+			mClearButton = v.findViewById(R.id.log_clear);
+			mClearButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View b) {
+					if (mConn.service != null) {
+						mConn.service.clearLog();
+					}
+				}
+			});
+			mActionButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View b) {
+					if (mConn.service == null) {
+						return;
+					}
+					if (mDisconnected) {
+						mConn.service.startReconnectActivity(mActivity);
+					} else {
+						stopVPN();
+					}
+				}
+			});
+		}
 		return v;
     }
 
