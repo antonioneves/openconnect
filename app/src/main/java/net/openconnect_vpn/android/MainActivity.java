@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_main);
 		mTabs = findViewById(R.id.tabs);
-		// the TV layout has no overflow menu, so it carries Settings and About as buttons
+		// the TV layout has no overflow menu, so it carries Settings, SecurID info and About as buttons
 		bindFragButton(R.id.tv_settings, "GeneralSettings");
+		bindFragButton(R.id.tv_securid, "TokenParentFragment");
 		bindFragButton(R.id.tv_about, "AboutFragment");
 		mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity {
 		int newState = service.getConnectionState();
 
 		service.startActiveDialog(this);
+
+		// on TV the SecurID info button is only offered while a connection is up or being set up
+		View securid = findViewById(R.id.tv_securid);
+		if (securid != null) {
+			securid.setVisibility(newState == OpenConnectManagementThread.STATE_DISCONNECTED ?
+					View.GONE : View.VISIBLE);
+		}
 
 		if (mConnectionState != newState) {
 			if (newState == OpenConnectManagementThread.STATE_DISCONNECTED) {

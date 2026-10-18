@@ -25,6 +25,7 @@
 package net.openconnect_vpn.android.fragments;
 
 import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -84,7 +85,9 @@ public class StatusFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
+		// the TV layout has Settings and About buttons in its header instead
+		boolean isTv = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+		setHasOptionsMenu(!isTv);
 	}
 
 	@Override
