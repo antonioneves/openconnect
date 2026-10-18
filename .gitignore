@@ -23,3 +23,6 @@ x86_64/
 
 external/.openconnect-sources
 external/curl/
+/app/release.properties
+*.jks
+*.keystore
