@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# JNI wrapper: the native library looks these classes and members up by name
+-keep class org.infradead.libopenconnect.** { *; }
+-keep class org.stoken.** { *; }
+
+# The app's own code is small. It is looked up by name (fragments from preference
+# and menu XML, serialized log entries, the AIDL API), so only shrink the libraries.
+-keep class net.openconnect_vpn.android.** { *; }
+-keepattributes SourceFile,LineNumberTable

@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import org.infradead.libopenconnect.LibOpenConnect;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +55,7 @@ public class VPNLog {
 	public static final int LEVEL_TRACE = LibOpenConnect.PRG_TRACE;
 
 	private static final int MAX_ENTRIES = 512;
+	private static final int TRIM_SLACK = 64;
 	private ArrayList<VPNLogItem> circ = new ArrayList<VPNLogItem>();
 	private LogArrayAdapter mArrayAdapter;
 
@@ -112,13 +115,34 @@ public class VPNLog {
 		}
 	}
 
+	// A connection attempt logs hundreds of lines in a burst: coalesce them into
+	// one list refresh per interval instead of redrawing for each line.
+	private static final int REFRESH_DELAY_MS = 100;
+	private final Handler mRefreshHandler = new Handler(Looper.getMainLooper());
+	private boolean mRefreshPending;
+	private final Runnable mRefresh = new Runnable() {
+		@Override
+		public void run() {
+			mRefreshPending = false;
+			updateAdapter();
+		}
+	};
+
+	private void scheduleUpdate() {
+		if (!mRefreshPending) {
+			mRefreshPending = true;
+			mRefreshHandler.postDelayed(mRefresh, REFRESH_DELAY_MS);
+		}
+	}
+
 	public void add(int level, String msg) {
 		VPNLogItem li = new VPNLogItem(level, msg);
 		circ.add(li);
-		while (circ.size() > MAX_ENTRIES) {
-			circ.remove(0);
+		// trim in blocks: removing the head of an ArrayList shifts every element
+		if (circ.size() > MAX_ENTRIES + TRIM_SLACK) {
+			circ.subList(0, circ.size() - MAX_ENTRIES).clear();
 		}
-		updateAdapter();
+		scheduleUpdate();
 	}
 
 	public void clear() {
