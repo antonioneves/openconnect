@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TV: show the app icon next to the title; the title lines up with the page content -->
+    <style name="Widget.OpenConnect.ActionBar" parent="Widget.Material3.ActionBar.Solid">
+        <item name="displayOptions">showHome|useLogo|showTitle</item>
+        <item name="logo">@drawable/ic_header_logo</item>
+        <item name="contentInsetStart">8dp</item>
+        <item name="contentInsetStartWithNavigation">8dp</item>
+    </style>
+</resources>

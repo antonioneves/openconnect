@@ -26,6 +26,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="actionBarStyle">@style/Widget.OpenConnect.ActionBar</item>
     </style>
+
+    <style name="Widget.OpenConnect.ActionBar" parent="Widget.Material3.ActionBar.Solid" />
 
 </resources>
