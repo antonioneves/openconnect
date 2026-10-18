@@ -200,6 +200,14 @@ public class VPNProfileList extends ListFragment {
 	}
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+    	super.onViewCreated(view, savedInstanceState);
+    	// the rows have their own focusable views; focus them directly instead of
+    	// selecting the whole row, so the D-pad highlight follows the card
+    	getListView().setItemsCanFocus(true);
+    }
+
+    @Override
     public void onDestroyView() {
     	mConn.unbind();
     	super.onDestroyView();
