@@ -502,16 +502,22 @@ public class AuthFormHandler extends UserDialog
 		android.widget.ScrollView sv = new android.widget.ScrollView(mContext);
 		sv.addView(box);
 
-		mAlert = new MaterialAlertDialogBuilder(mContext)
+		boolean isTv = mContext.getPackageManager().hasSystemFeature(
+				android.content.pm.PackageManager.FEATURE_LEANBACK);
+		MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext)
 				.setView(sv)
 				.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
 				.setPositiveButton(R.string.ok, h)
-				.setNegativeButton(R.string.cancel, h)
-				.create();
+				.setNegativeButton(R.string.cancel, h);
+		if (isTv) {
+			// the system keeps the dialog above the TV keyboard (about half the screen):
+			// drop the default 80dp top/bottom insets so the fields still fit there
+			builder.setBackgroundInsetTop(0).setBackgroundInsetBottom(0);
+		}
+		mAlert = builder.create();
 		mAlert.setOnDismissListener(h);
 
-		if (mContext.getPackageManager().hasSystemFeature(
-				android.content.pm.PackageManager.FEATURE_LEANBACK)) {
+		if (isTv) {
 			// the TV keyboard only covers the lower part of the screen: keep the dialog
 			// at the top at its natural size instead of letting it get squeezed
 			mAlert.getWindow().setSoftInputMode(
