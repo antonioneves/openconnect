@@ -1,0 +1,9 @@
+* Material 3 Expressive look and feel with dynamic color
+* Redesigned Google TV interface
+* Profiles are shown as cards
+* Settings screens migrated to AndroidX preferences
+* FAQ and credits merged into a single About screen
+* Skip the login dialog when credentials are saved; new "Always ask for credentials" option
+* New app icon
+* Native libraries aligned for 16 KB page sizes
+* Build with Gradle 9.8.1, AGP 9.4.1 and Java 25

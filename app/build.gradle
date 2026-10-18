@@ -9,8 +9,8 @@ android {
         targetSdk 34
         compileSdk 37
 
-        versionCode 1120
-        versionName "1.12"
+        versionCode 2000
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     if (file("release.properties").exists()) {
