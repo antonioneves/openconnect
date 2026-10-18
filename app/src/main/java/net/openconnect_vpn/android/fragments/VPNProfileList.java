@@ -156,6 +156,8 @@ public class VPNProfileList extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		final View v = inflater.inflate(R.layout.vpn_profile_list, container,false);
+		// the view can be recreated for the same fragment: ask for focus again each time
+		mReconnectFocusSet = false;
 
 		TextView newvpntext = (TextView) v.findViewById(R.id.add_new_vpn_hint);
 		newvpntext.setText(Html.fromHtml(getString(R.string.add_new_vpn_hint),new MiniImageGetter(),null));
@@ -189,10 +191,22 @@ public class VPNProfileList extends ListFragment {
 				String profileName = service.getReconnectName();
 				if (profileName != null) {
 					mReconnectButton.setText(getString(R.string.reconnect_to, profileName));
-					if (mIsTv)
+					if (mIsTv) {
 						mReconnectButton.setVisibility(View.VISIBLE);
-					else
+						if (!mReconnectFocusSet) {
+							// on TV the remote should land on Reconnect when the app opens;
+							// post, so it runs once the view is attached and laid out
+							mReconnectFocusSet = true;
+							mReconnectButton.post(new Runnable() {
+								@Override
+								public void run() {
+									mReconnectButton.requestFocus();
+								}
+							});
+						}
+					} else {
 						v.findViewById(R.id.reconnect_box).setVisibility(View.VISIBLE);
+					}
 				}
 			}
     	};

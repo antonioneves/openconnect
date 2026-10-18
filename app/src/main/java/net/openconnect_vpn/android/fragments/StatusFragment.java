@@ -60,6 +60,8 @@ public class StatusFragment extends Fragment {
     	super.onCreateView(inflater, container, savedInstanceState);
 
     	mView = inflater.inflate(R.layout.status, container, false);
+    	// the view can be recreated for the same fragment: ask for focus again each time
+    	mFocusSet = false;
     	mDisconnectButton = (Button)mView.findViewById(R.id.disconnect_button);
 
     	mDisconnectButton.setOnClickListener(new OnClickListener() {
@@ -183,7 +185,12 @@ public class StatusFragment extends Fragment {
 			if (mIsTv && !mFocusSet) {
 				// on TV the remote should land on Disconnect when the page opens
 				mFocusSet = true;
-				mDisconnectButton.requestFocus();
+				mDisconnectButton.post(new Runnable() {
+					@Override
+					public void run() {
+						mDisconnectButton.requestFocus();
+					}
+				});
 			}
 		}
     }
