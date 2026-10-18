@@ -78,6 +78,7 @@ public class VPNProfileList extends ListFragment {
 	private AlertDialog mDialog;
 	private EditText mDialogEntry;
 	private Button mReconnectButton;
+	private boolean mReconnectFocusSet;
 
 	private VPNConnector mConn;
 
@@ -232,6 +233,11 @@ public class VPNProfileList extends ListFragment {
 
 		mArrayadapter.clear();
 		mArrayadapter.addAll(allvpn);
+
+		if (mIsTv && allvpn.isEmpty()) {
+			// nothing to connect to yet: start on "Add new connection"
+			getView().findViewById(R.id.add_new_button).requestFocus();
+		}
 
 		String s = FragCache.get("VPNProfileList", "mDialogEntry");
 		if (s != null) {

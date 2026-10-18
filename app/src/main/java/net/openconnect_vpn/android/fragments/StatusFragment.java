@@ -51,6 +51,8 @@ public class StatusFragment extends Fragment {
 
 	private CommonMenu mDropdown;
 	private Button mDisconnectButton;
+	private boolean mIsTv;
+	private boolean mFocusSet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,8 +88,8 @@ public class StatusFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// the TV layout has Settings and About buttons in its header instead
-		boolean isTv = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
-		setHasOptionsMenu(!isTv);
+		mIsTv = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+		setHasOptionsMenu(!mIsTv);
 	}
 
 	@Override
@@ -178,6 +180,11 @@ public class StatusFragment extends Fragment {
 		} else {
 			mDisconnectButton.setVisibility(View.VISIBLE);
 			mDisconnectButton.setText(R.string.disconnect);
+			if (mIsTv && !mFocusSet) {
+				// on TV the remote should land on Disconnect when the page opens
+				mFocusSet = true;
+				mDisconnectButton.requestFocus();
+			}
 		}
     }
 }
