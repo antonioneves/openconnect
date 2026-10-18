@@ -36,6 +36,8 @@ import net.openconnect_vpn.android.VpnProfile;
 import net.openconnect_vpn.android.core.ProfileManager;
 
 import android.content.pm.PackageManager;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.os.Bundle;
 import android.os.Environment;
 import androidx.preference.CheckBoxPreference;
@@ -288,6 +290,13 @@ public class ConnectionEditorFragment extends PreferenceFragmentCompat
 		p = findPreference("delete_profile");
 		// don't show delete preference when not on a tv
 		if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+			// destructive action: show the label in red
+			SpannableString title = new SpannableString(p.getTitle());
+			title.setSpan(new ForegroundColorSpan(requireContext().getColor(R.color.destructive)),
+					0, title.length(), 0);
+			// setTitle() ignores text that equals the current title, so clear it first
+			p.setTitle("");
+			p.setTitle(title);
 			p.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
