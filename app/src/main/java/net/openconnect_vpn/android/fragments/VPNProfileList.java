@@ -235,7 +235,7 @@ public class VPNProfileList extends ListFragment {
 		mArrayadapter.addAll(allvpn);
 
 		if (mIsTv && allvpn.isEmpty()) {
-			// nothing to connect to yet: start on "Add new connection"
+			// nothing to connect to yet: start on "Add new profile"
 			getView().findViewById(R.id.add_new_button).requestFocus();
 		}
 

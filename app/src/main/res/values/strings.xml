@@ -44,7 +44,7 @@
     <string name="use_dtls">Use DTLS</string>
     <string name="use_dtls_summary">Connect over UDP</string>
 
-    <string name="add_new_button">Add new connection</string>
+    <string name="add_new_button">Add new profile</string>
     <string name="delete_profile">Delete profile</string>
     <string name="sni">Custom SNI</string>
     <string name="sni_hint">Enter value that should always be sent as TLS client SNI:</string>
