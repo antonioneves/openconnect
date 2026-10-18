@@ -19,7 +19,13 @@ This is a VPN client for Android, based on the Linux build of
 
 Much of the Java code was derived from [OpenVPN for Android](https://play.google.com/store/apps/details?id=de.blinkt.openvpn&hl=en) by Arne Schwabe.
 
-OpenConnect for Android is released under the GPLv2 license.  For more
+This repository is a fork of the
+[ics-openconnect](https://gitlab.com/openconnect/ics-openconnect) project on GitLab.
+It adds a Material 3 Expressive interface, a redesigned Android TV interface, an updated
+build toolchain (Gradle 9, AGP 9, Java 25) and 16 KB page size support.  All original
+copyright and licence notices are kept, and the changes are recorded in the git history.
+
+OpenConnect for Android is released under the GPLv2 license (GPLv2 or later, with an OpenSSL linking exception).  For more
 information see the [COPYING](COPYING) and [doc/LICENSE.txt](misc/doc/LICENSE.txt)
 files.
 
