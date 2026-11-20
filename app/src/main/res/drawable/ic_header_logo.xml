@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- the launcher icon as a circle, for the TV action bar. The 12dp on the right makes the
-     action bar title line up with the TV page content (8dp inset + 48dp = 56dp) -->
+<!-- the launcher icon as a circle, for the action bar. The 12dp on the right is the gap
+     before the title; on TV it also makes the title line up with the page content
+     (8dp inset + 48dp = 56dp) -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/ic_header_logo_bg"

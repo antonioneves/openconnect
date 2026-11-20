@@ -29,6 +29,10 @@
         <item name="actionBarStyle">@style/Widget.OpenConnect.ActionBar</item>
     </style>
 
-    <style name="Widget.OpenConnect.ActionBar" parent="Widget.Material3.ActionBar.Solid" />
+    <!-- Show the app icon at the start of the action bar, next to the title -->
+    <style name="Widget.OpenConnect.ActionBar" parent="Widget.Material3.ActionBar.Solid">
+        <item name="displayOptions">showHome|useLogo|showTitle</item>
+        <item name="logo">@drawable/ic_header_logo</item>
+    </style>
 
 </resources>

@@ -12,6 +12,7 @@
 package net.openconnect_vpn.android;
 
 import android.annotation.TargetApi;
+import android.graphics.drawable.Icon;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
@@ -35,6 +36,19 @@ public class QSTileService extends TileService {
     @Override
     public void onStartListening() {
         super.onStartListening();
+
+        // Show something right away: binding to the VPN service is asynchronous, and the tile
+        // would be empty until it answers. Also forget the last state, so that it is redrawn
+        // even if it has not changed since the tile was last visible.
+        mConnectionState = 0;
+        Tile tile = getQsTile();
+        if (tile != null) {
+            tile.setIcon(Icon.createWithResource(this, R.drawable.ic_qs_tile));
+            tile.setLabel(getString(R.string.app));
+            tile.setState(Tile.STATE_INACTIVE);
+            tile.updateTile();
+        }
+
         mConn = new VPNConnector(this, true) {
             @Override
             public void onUpdate(OpenVpnService service) {
@@ -47,8 +61,11 @@ public class QSTileService extends TileService {
     public void onStopListening() {
         super.onStopListening();
 
-        mConn.stopActiveDialog();
-        mConn.unbind();
+        if (mConn != null) {
+            mConn.stopActiveDialog();
+            mConn.unbind();
+            mConn = null;
+        }
     }
 
     @Override
@@ -94,6 +111,10 @@ public class QSTileService extends TileService {
             }
 
             Tile tile = getQsTile();
+            if (tile == null) {
+                return;
+            }
+            tile.setIcon(Icon.createWithResource(this, R.drawable.ic_qs_tile));
             tile.setState(tileState);
             tile.setLabel(tileLabel);
             Log.d(TAG, "set tile state: " + tileState + ", label: " + tileLabel);
@@ -102,6 +123,9 @@ public class QSTileService extends TileService {
     }
 
     private void toggle() {
+        if (mConn == null || mConn.service == null) {
+            return;
+        }
         if (mConnectionState == OpenConnectManagementThread.STATE_CONNECTED) {
             mConn.service.stopVPN();
         } else if (mConnectionState == OpenConnectManagementThread.STATE_DISCONNECTED) {
