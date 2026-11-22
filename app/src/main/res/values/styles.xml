@@ -16,7 +16,7 @@
   limitations under the License.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="stdpadding">8dp</dimen>
 
@@ -27,6 +27,9 @@
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="actionBarStyle">@style/Widget.OpenConnect.ActionBar</item>
+        <!-- splash screen of Android 12 and later: the logo instead of the launcher icon on its blue
+             background (earlier versions have no icon splash, and ignore this) -->
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="31">@drawable/ic_splash_logo</item>
     </style>
 
     <!-- Show the app icon at the start of the action bar, next to the title -->

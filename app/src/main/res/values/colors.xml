@@ -5,4 +5,6 @@
     <!-- the connector in the action bar logo: the launcher icon's green on dark, a deeper one on light
          so it stays visible against the light action bar -->
     <color name="logo_connector">#16A34A</color>
+    <!-- the ring of the splash screen icon: dark on the light splash, light on the dark one -->
+    <color name="logo_ring">#1C1B1F</color>
 </resources>

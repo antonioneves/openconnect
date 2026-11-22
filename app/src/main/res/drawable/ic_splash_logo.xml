@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- the splash screen icon (Android 12+): the same ring and green connector as the action bar logo,
+     with no background. The system shows the icon on a 288dp canvas and masks it to the central
+     192dp circle, so the 32-unit logo is scaled up to an outer radius of 84dp (5.6 x 15), which sits
+     inside the mask. The colours are fixed resources rather than theme attributes, because the
+     splash is drawn before the app's own theme and dynamic colour are applied -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <group
+        android:scaleX="5.6"
+        android:scaleY="5.6"
+        android:translateX="54.4"
+        android:translateY="54.4">
+        <path
+            android:pathData="M16,16m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0"
+            android:strokeColor="@color/logo_ring"
+            android:strokeWidth="6" />
+        <path
+            android:fillColor="@color/logo_connector"
+            android:pathData="M16,16m-4.2,0a4.2,4.2 0,1 1,8.4 0a4.2,4.2 0,1 1,-8.4 0M16,14.5h11.7v3H16zM27.7,16m-3.3,0a3.3,3.3 0,1 1,6.6 0a3.3,3.3 0,1 1,-6.6 0" />
+    </group>
+</vector>
