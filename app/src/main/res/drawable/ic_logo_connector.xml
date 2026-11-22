@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The green connector of the launcher icon on its own: a dot joined by a bar to a smaller dot.
-     It is centred in the drawable, so rotating the whole drawable turns it in place -->
+<!-- the green connector of the launcher icon: a dot at the centre of the ring, joined by a bar to
+     a smaller dot that sits on the ring. It is drawn about the ring's centre, so rotating the
+     whole drawable turns the connector inside the ring -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="36dp"
-    android:height="36dp"
-    android:viewportWidth="36"
-    android:viewportHeight="36">
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
     <path
-        android:fillColor="#4ADE80"
-        android:pathData="M9.54,18m-6.58,0a6.58,6.58 0,1 1,13.16 0a6.58,6.58 0,1 1,-13.16 0M9.54,15.65h18.33v4.7H9.54zM27.87,18m-5.17,0a5.17,5.17 0,1 1,10.34 0a5.17,5.17 0,1 1,-10.34 0" />
+        android:fillColor="@color/logo_connector"
+        android:pathData="M16,16m-4.2,0a4.2,4.2 0,1 1,8.4 0a4.2,4.2 0,1 1,-8.4 0M16,14.5h11.7v3H16zM27.7,16m-3.3,0a3.3,3.3 0,1 1,6.6 0a3.3,3.3 0,1 1,-6.6 0" />
 </vector>

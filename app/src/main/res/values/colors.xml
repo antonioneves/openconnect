@@ -2,4 +2,7 @@
 <resources>
     <!-- label of destructive actions such as "Delete profile" -->
     <color name="destructive">#C62828</color>
+    <!-- the connector in the action bar logo: the launcher icon's green on dark, a deeper one on light
+         so it stays visible against the light action bar -->
+    <color name="logo_connector">#16A34A</color>
 </resources>
