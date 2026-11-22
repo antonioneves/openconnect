@@ -117,8 +117,9 @@ public class LogoSpinner {
 
 		if (mEasingOut) {
 			if (t >= mDuration) {
-				// arrived: the angle is a whole number of turns, which is the icon's resting position
-				mTicker.end();
+				// arrived: the angle is a whole number of turns, which is the icon's resting position.
+				// (cancel, not end: end() replays the update callback, which would re-enter this method)
+				mTicker.cancel();
 				return;
 			}
 			double decel = mV0 / mDuration;
@@ -139,7 +140,7 @@ public class LogoSpinner {
 		// switch phase from where the connector is right now, so there is no jump
 		if (!mEasingOut && !mSpin) {
 			if (speed < MIN_SPEED) {
-				mTicker.end();
+				mTicker.cancel();
 				return;
 			}
 			beginEaseOut(now, angle, speed);
