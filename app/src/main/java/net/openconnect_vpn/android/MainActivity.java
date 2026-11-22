@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private int mConnectionState = OpenConnectManagementThread.STATE_DISCONNECTED;
 	private VPNConnector mConn;
+	private LogoSpinner mLogoSpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		setContentView(R.layout.activity_main);
+		mLogoSpinner = LogoSpinner.attach(this);
 		mTabs = findViewById(R.id.tabs);
 		// the TV layout has no overflow menu, so it carries Settings, SecurID info and About as buttons
 		bindFragButton(R.id.tv_settings, "GeneralSettings");
@@ -123,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
 		service.startActiveDialog(this);
 
+		// the connector in the app icon turns for as long as the connection is being set up
+		if (mLogoSpinner != null) {
+			mLogoSpinner.setSpinning(isConnecting(newState));
+		}
+
 		// on TV the SecurID info button is only offered while a connection is up or being set up
 		View securid = findViewById(R.id.tv_securid);
 		if (securid != null) {
@@ -149,6 +156,18 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	private static boolean isConnecting(int state) {
+		switch (state) {
+			case OpenConnectManagementThread.STATE_AUTHENTICATING:
+			case OpenConnectManagementThread.STATE_USER_PROMPT:
+			case OpenConnectManagementThread.STATE_AUTHENTICATED:
+			case OpenConnectManagementThread.STATE_CONNECTING:
+				return true;
+			default:
+				return false;
+		}
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -165,6 +184,9 @@ public class MainActivity extends AppCompatActivity {
 	protected void onPause() {
 		mConn.stopActiveDialog();
 		mConn.unbind();
+		if (mLogoSpinner != null) {
+			mLogoSpinner.stopNow();
+		}
 		super.onPause();
 	}
 
